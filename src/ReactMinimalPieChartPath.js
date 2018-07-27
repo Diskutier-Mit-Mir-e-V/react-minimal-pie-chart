@@ -1,44 +1,45 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import partialCircle from 'svg-partial-circle';
 
-const PI = Math.PI;
-const degreesToRadians = degrees => ((degrees * PI) / 180);
+import React from 'react'
+import PropTypes from 'prop-types'
+import partialCircle from 'svg-partial-circle'
+
+const PI = Math.PI
+const degreesToRadians = degrees => ((degrees * PI) / 180)
 
 const makePathCommands = (cx, cy, startAngle, lengthAngle, radius) => {
-  let patchedLengthAngle = lengthAngle;
+  let patchedLengthAngle = lengthAngle
 
-  if (patchedLengthAngle >= 360) patchedLengthAngle = 359.999;
-  if (patchedLengthAngle <= -360) patchedLengthAngle = -359.999;
+  if (patchedLengthAngle >= 360) patchedLengthAngle = 359.999
+  if (patchedLengthAngle <= -360) patchedLengthAngle = -359.999
 
   return partialCircle(
-      cx, cy,                                   // center X and Y
-      radius,
-      degreesToRadians(startAngle),
-      degreesToRadians(startAngle + patchedLengthAngle)
+    cx, cy, // center X and Y
+    radius,
+    degreesToRadians(startAngle),
+    degreesToRadians(startAngle + patchedLengthAngle)
   )
-  .map(command => command.join(' '))
-  .join(' ');
-};
+    .map(command => command.join(' '))
+    .join(' ')
+}
 
 export default function ReactMinimalPieChartPath (
   {cx, cy, startAngle, lengthAngle, radius, lineWidth, reveal, ...props}
 ) {
-  const actualRadio = radius - (lineWidth / 2);
+  const actualRadio = radius - (lineWidth / 2)
   const pathCommands = makePathCommands(
     cx, cy,
     startAngle,
     lengthAngle,
     actualRadio
-  );
-  let strokeDasharray;
-  let strokeDashoffset;
+  )
+  let strokeDasharray
+  let strokeDashoffset
 
   // Animate/hide paths with "stroke-dasharray" + "stroke-dashoffset"
   // https://css-tricks.com/svg-line-animation-works/
   if (typeof reveal === 'number') {
-    strokeDasharray = ((PI * actualRadio) / 180) * Math.abs(lengthAngle);
-    strokeDashoffset = strokeDasharray + (strokeDasharray / 100) * reveal;
+    strokeDasharray = ((PI * actualRadio) / 180) * Math.abs(lengthAngle)
+    strokeDashoffset = strokeDasharray + (strokeDasharray / 100) * reveal
   }
 
   return (
@@ -49,10 +50,10 @@ export default function ReactMinimalPieChartPath (
       strokeDashoffset={strokeDashoffset}
       {...props}
     />
-  );
+  )
 }
 
-ReactMinimalPieChartPath.displayName = 'ReactMinimalPieChartPath';
+ReactMinimalPieChartPath.displayName = 'ReactMinimalPieChartPath'
 
 ReactMinimalPieChartPath.propTypes = {
   cx: PropTypes.number.isRequired,
@@ -61,12 +62,12 @@ ReactMinimalPieChartPath.propTypes = {
   lengthAngle: PropTypes.number,
   radius: PropTypes.number,
   lineWidth: PropTypes.number,
-  reveal: PropTypes.number,
-};
+  reveal: PropTypes.number
+}
 
 ReactMinimalPieChartPath.defaultProps = {
   startAngle: 0,
   lengthAngle: 0,
   lineWidth: 100,
-  radius: 100,
-};
+  radius: 100
+}

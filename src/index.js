@@ -1,1 +1,2 @@
-export { default } from './ReactMinimalPieChart';
+
+export { default } from './ReactMinimalPieChart'
