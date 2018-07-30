@@ -10,13 +10,10 @@
     "lib"
   ],
   "scripts": {
-    "test": "jest",
-    "tests": "npm run lint && npm t",
     "clean": "rm -rf lib es",
     "compile": "npm run clean && cross-env BABEL_ENV=rollup rollup -c",
     "contrib:add": "all-contributors add",
     "contrib:generate": "all-contributors generate",
-    "lint": "eslint ./src --ext .js --ignore-pattern **/__tests__/",
     "preversion": "npm run tests",
     "version": "git add package.json",
     "postversion": "git push && git push --tags",
