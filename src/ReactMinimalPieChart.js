@@ -114,6 +114,8 @@ export default class ReactMinimalPieChart extends Component {
     this.setState({
       activeSegment: index
     })
+
+    this.props.clicked(this.state.activeSegment)
   }
 
   // Lifecycle methods
@@ -205,7 +207,8 @@ ReactMinimalPieChart.propTypes = {
   animationDuration: PropTypes.number,
   animationEasing: PropTypes.string,
   reveal: PropTypes.number,
-  children: PropTypes.node
+  children: PropTypes.node,
+  clicked: PropTypes.func
 }
 
 ReactMinimalPieChart.defaultProps = {
