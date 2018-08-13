@@ -115,7 +115,7 @@ export default class ReactMinimalPieChart extends Component {
       activeSegment: index
     })
 
-    this.props.clicked(this.state.activeSegment)
+    this.props.clicked(index)
   }
 
   // Lifecycle methods
