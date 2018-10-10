@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Path from './ReactMinimalPieChartPath'
@@ -13,7 +12,7 @@ export default class ReactMinimalPieChart extends Component {
   }
 
   // Constructors
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     if (this.props.animate === true) {
@@ -25,16 +24,16 @@ export default class ReactMinimalPieChart extends Component {
   }
 
   // Private methods
-  _startAnimation () {
+  _startAnimation() {
     this.hideSegments = false
     this.forceUpdate()
   }
 
-  _sumValues (data) {
+  _sumValues(data) {
     return data.reduce((acc, dataEntry) => acc + dataEntry.value, 0)
   }
 
-  _evaluateViewBoxSize (ratio, baseSize) {
+  _evaluateViewBoxSize(ratio, baseSize) {
     // Wide ratio
     if (ratio > 1) {
       return `${baseSize} ${baseSize / ratio}`
@@ -44,30 +43,27 @@ export default class ReactMinimalPieChart extends Component {
   }
 
   // @TODO extract padding evaluation
-  _evaluateDegreesFromValues (data, totalAngle, totalValue, paddingAngle) {
+  _evaluateDegreesFromValues(data, totalAngle, totalValue, paddingAngle) {
     const total = totalValue || this._sumValues(data)
 
     // Remove segments padding from total degrees
-    const degreesTakenByPadding = paddingAngle * (data.length)
+    const degreesTakenByPadding = paddingAngle * data.length
     let totalDegrees = Math.abs(totalAngle) - degreesTakenByPadding
 
     if (totalDegrees > 360) totalDegrees = 360
     if (totalAngle < 0) totalDegrees = -totalDegrees
 
     // Append "degrees" into each data entry
-    return data.map(dataEntry => Object.assign(
-      { degrees: (dataEntry.value / total) * totalDegrees },
-      dataEntry
-    ))
+    return data.map(dataEntry => Object.assign({ degrees: (dataEntry.value / total) * totalDegrees }, dataEntry))
   }
 
-  _makeSegmentTransitionStyle (duration, easing) {
+  _makeSegmentTransitionStyle(duration, easing) {
     return {
       transition: `stroke-dashoffset ${duration}ms ${easing}`
     }
   }
 
-  _makeSegments (data, props, hide) {
+  _makeSegments(data, props, hide) {
     // Keep track of how many degrees have already been taken
     let lastSegmentAngle = props.startAngle
     const segmentsPaddingAngle = props.paddingAngle * (props.lengthAngle / Math.abs(props.lengthAngle))
@@ -101,16 +97,16 @@ export default class ReactMinimalPieChart extends Component {
           lineWidth={(props.radius / 100) * props.lineWidth}
           reveal={reveal}
           style={style}
-          stroke={this.state.activeSegment === index ? (dataEntry.highlight || dataEntry.color) : dataEntry.color}
+          stroke={this.state.activeSegment === index ? dataEntry.highlight || dataEntry.color : dataEntry.color}
           strokeLinecap={props.rounded ? 'round' : undefined}
-          fill='none'
+          fill="none"
           onClick={() => this._handlePathClick(index)}
         />
       )
     })
   }
 
-  _handlePathClick (index) {
+  _handlePathClick(index) {
     this.setState({
       activeSegment: index
     })
@@ -119,21 +115,19 @@ export default class ReactMinimalPieChart extends Component {
   }
 
   // Lifecycle methods
-  componentDidMount () {
+  componentDidMount() {
     if (this.props.animate === true && window.requestAnimationFrame) {
-      this.initialAnimationTimerId = setTimeout(
-        () => {
-          this.initialAnimationTimerId = null
-          this.initialAnimationRAFId = window.requestAnimationFrame(() => {
-            this.initialAnimationRAFId = null
-            this._startAnimation()
-          })
-        }
-      )
+      this.initialAnimationTimerId = setTimeout(() => {
+        this.initialAnimationTimerId = null
+        this.initialAnimationRAFId = window.requestAnimationFrame(() => {
+          this.initialAnimationRAFId = null
+          this._startAnimation()
+        })
+      })
     }
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     if (this.initialAnimationTimerId) {
       clearTimeout(this.initialAnimationTimerId)
     }
@@ -142,7 +136,7 @@ export default class ReactMinimalPieChart extends Component {
     }
   }
 
-  render () {
+  render() {
     if (this.props.data === undefined) {
       return null
     }
@@ -155,14 +149,11 @@ export default class ReactMinimalPieChart extends Component {
     )
 
     return (
-      <div
-        className={this.props.className}
-        style={this.props.style}
-      >
+      <div className={this.props.className} style={this.props.style}>
         <svg
           viewBox={`0 0 ${this._evaluateViewBoxSize(this.props.ratio, VIEWBOX_SIZE)}`}
-          width='100%'
-          height='100%'
+          width="100%"
+          height="100%"
           style={{ display: 'block' }}
         >
           {this._makeSegments(normalizedData, this.props, this.hideSegments)}
@@ -179,10 +170,7 @@ ReactMinimalPieChart.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       value: PropTypes.number.isRequired,
-      key: PropTypes.oneOfType([
-        PropTypes.number,
-        PropTypes.string
-      ]),
+      key: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       color: PropTypes.string,
       highlight: PropTypes.string
     })
@@ -191,12 +179,7 @@ ReactMinimalPieChart.propTypes = {
   cy: PropTypes.number,
   ratio: PropTypes.number,
   totalValue: PropTypes.number,
-  style: PropTypes.objectOf(
-    PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.string
-    ])
-  ),
+  style: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.number, PropTypes.string])),
   startAngle: PropTypes.number,
   lengthAngle: PropTypes.number,
   paddingAngle: PropTypes.number,

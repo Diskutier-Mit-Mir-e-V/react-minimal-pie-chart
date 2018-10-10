@@ -1,10 +1,9 @@
-
 import React from 'react'
 import PropTypes from 'prop-types'
 import partialCircle from 'svg-partial-circle'
 
 const PI = Math.PI
-const degreesToRadians = degrees => ((degrees * PI) / 180)
+const degreesToRadians = degrees => (degrees * PI) / 180
 
 const makePathCommands = (cx, cy, startAngle, lengthAngle, radius) => {
   let patchedLengthAngle = lengthAngle
@@ -13,7 +12,8 @@ const makePathCommands = (cx, cy, startAngle, lengthAngle, radius) => {
   if (patchedLengthAngle <= -360) patchedLengthAngle = -359.999
 
   return partialCircle(
-    cx, cy, // center X and Y
+    cx,
+    cy, // center X and Y
     radius,
     degreesToRadians(startAngle),
     degreesToRadians(startAngle + patchedLengthAngle)
@@ -22,16 +22,18 @@ const makePathCommands = (cx, cy, startAngle, lengthAngle, radius) => {
     .join(' ')
 }
 
-export default function ReactMinimalPieChartPath (
-  {cx, cy, startAngle, lengthAngle, radius, lineWidth, reveal, ...props}
-) {
-  const actualRadio = radius - (lineWidth / 2)
-  const pathCommands = makePathCommands(
-    cx, cy,
-    startAngle,
-    lengthAngle,
-    actualRadio
-  )
+export default function ReactMinimalPieChartPath({
+  cx,
+  cy,
+  startAngle,
+  lengthAngle,
+  radius,
+  lineWidth,
+  reveal,
+  ...props
+}) {
+  const actualRadio = radius - lineWidth / 2
+  const pathCommands = makePathCommands(cx, cy, startAngle, lengthAngle, actualRadio)
   let strokeDasharray
   let strokeDashoffset
 
